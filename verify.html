@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduNaviQ Technology - Staff Verification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .animate-fadeOut {
+            animation: fadeOut 0.5s ease-in forwards;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2CA5A9;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1F7A7E;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'edu-primary': '#0A2342',
+                        'edu-secondary': '#2CA5A9',
+                        'edu-hover': '#3DDAD0',
+                        'edu-light': '#f0f4f8',
+                        'edu-dark-text': '#333333',
+                        'edu-medium-text': '#555555',
+                        'edu-verified-bg': '#4CAF50',
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-edu-light text-edu-dark-text flex flex-col min-h-screen">
+
+    <header
+        class="bg-gradient-to-r from-edu-primary to-edu-secondary text-white py-8 px-4 text-center border-b-4 border-edu-secondary shadow-lg">
+        <div class="container mx-auto max-w-6xl">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-wider">EduNaviQ Technology</h1>
+            <p class="text-md mt-2 font-light">Staff Verification Portal</p>
+        </div>
+    </header>
+
+    <div id="verifiedPopup"
+        class="fixed top-1/2 left-2/4 transform -translate-x-1/2 -translate-y-1/2 bg-edu-verified-bg text-white p-6 rounded-lg shadow-2xl z-[100] hidden items-center space-x-4 animate-fadeIn">
+        <i class="fas fa-check-circle text-4xl"></i>
+        <span class="text-2xl font-semibold">Verified ID</span>
+    </div>
+
+    <main class="flex-grow container mx-auto max-w-3xl my-8 md:my-10 px-4">
+        <section id="staff-detail-content" class="p-6 md:p-10 bg-white rounded-xl shadow-2xl hidden animate-fadeIn">
+            <img id="staffImage" src="" alt="Staff Member Photo"
+                class="block w-40 h-40 md:w-48 md:h-48 rounded-full object-cover mx-auto mb-6 border-4 border-edu-secondary shadow-lg">
+            <h2 id="staffName" class="text-center text-edu-primary text-3xl md:text-4xl font-bold mb-1"></h2>
+            <p id="staffTitle" class="text-center text-edu-secondary text-xl md:text-2xl mb-8"></p>
+            <div class="space-y-4 text-gray-700 text-base md:text-lg">
+                <div class="flex items-center border-b pb-2">
+                    <i class="fas fa-envelope text-edu-secondary w-6 text-center mr-3"></i>
+                    <strong>Email:</strong>&nbsp;<a id="staffEmail" href="#"
+                        class="text-edu-secondary hover:underline ml-2"></a>
+                </div>
+                <div class="flex items-center border-b pb-2">
+                    <i class="fas fa-phone text-edu-secondary w-6 text-center mr-3"></i>
+                    <strong>Phone:</strong>&nbsp;<span id="staffPhone" class="text-edu-medium-text ml-2"></span>
+                </div>
+                <div class="flex items-center border-b pb-2">
+                    <i class="fas fa-building text-edu-secondary w-6 text-center mr-3"></i>
+                    <strong>Department:</strong>&nbsp;<span id="staffDepartment"
+                        class="text-edu-medium-text ml-2"></span>
+                </div>
+                <div class="flex items-center border-b pb-2">
+                    <i class="fas fa-id-card text-edu-secondary w-6 text-center mr-3"></i>
+                    <strong>Employee ID:</strong>&nbsp;<span id="staffEmployeeId"
+                        class="text-edu-medium-text ml-2"></span>
+                </div>
+                <div class="pt-2">
+                    <strong class="block mb-2 text-xl flex items-center"><i
+                            class="fas fa-info-circle text-edu-secondary w-6 text-center mr-3"></i>Bio:</strong>
+                    <p id="staffBio" class="text-edu-medium-text text-justify leading-relaxed pl-9"></p>
+                </div>
+            </div>
+            <div id="staffSocialMedia" class="social-media-links text-center mt-8 pt-6 border-t border-gray-200"></div>
+
+            <div class="text-center mt-6"><a href="index.html"
+                    class="mt-6 inline-block bg-edu-primary text-white px-6 py-2 rounded-md hover:bg-opacity-80 transition-colors">Back
+                    to Team Page</a></div>
+        </section>
+        <section id="errorMessage" class="p-6 text-center hidden animate-fadeIn">
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-6 rounded-lg shadow-md" role="alert">
+                <div class="flex">
+                    <div class="py-1"><i class="fas fa-exclamation-triangle text-2xl mr-3"></i></div>
+                    <div>
+                        <p class="font-bold text-xl">Staff Member Not Found</p>
+                        <p class="text-md">The staff ID in the URL is invalid or does not exist in our records. Please
+                            verify the QR code or contact support if you believe this is an error.</p>
+                    </div>
+                </div>
+            </div>
+            <a href="index.html"
+                class="mt-6 inline-block bg-edu-primary text-white px-6 py-2 rounded-md hover:bg-opacity-80 transition-colors">Back
+                to Team Page</a>
+        </section>
+    </main>
+
+    <footer class="bg-edu-primary text-white text-center py-6 mt-auto">
+        <div class="container mx-auto max-w-6xl">
+            <p>&copy; <span id="currentYear"></span> EduNaviQ Technology. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentYearSpan = document.getElementById('currentYear');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            const verifiedPopup = document.getElementById('verifiedPopup');
+            const staffDetailContent = document.getElementById('staff-detail-content');
+            const errorMessageSection = document.getElementById('errorMessage');
+
+            // --- Staff Data for verify.html (Comprehensive list for QR verification) ---
+            // This should contain ALL staff members who will have a QR code.
+            // Keep this consistent with staffData in script.js for members also on the team page.
+            const staffData = {
+                9030: {
+                    name: "KAMRUZZAMAN AKASH",
+                    title: "HR & Admin Manager",
+                    email: "akash@edunaviq.tech",
+                    image: "images/michael.jpg", // Replace
+                    phone: "+880-1310-519030",
+                    department: "HR & Administration",
+                    employeeId: "A001",
+                    bio: "AKASH is an experienced in building scalable EdTech platforms. He leads the core system development at EduNaviQ Technology, focusing on innovative solutions and robust architecture. His problem-solving skills are key to our tech advancements.",
+                    social: [{
+                            platform: "LinkedIn",
+                            url: "https://www.linkedin.com/in/kamruj-akash/",
+                            icon: "fab fa-linkedin"
+                        },
+                        {
+                            platform: "Twitter",
+                            url: "https://x.com/kamruj_akash",
+                            icon: "fab fa-twitter-square"
+                        },
+                        {
+                            platform: "Github",
+                            url: "https://github.com/kamruj-akash",
+                            icon: "fab fa-github-square"
+                        }
+                    ]
+                },
+                2: {
+                    name: "Sophia Miller",
+                    title: "Senior Educational Consultant",
+                    email: "sophia.miller@edunaviq.tech",
+                    image: "images/sophia.jpg", // Replace
+                    phone: "+1-555-0102",
+                    department: "Academic Advisory",
+                    employeeId: "EC002",
+                    bio: "Sophia is a dedicated educational consultant with a passion for helping students navigate their academic journeys. She provides expert guidance on course selection, career planning, and skill development, empowering students to achieve their full potential.",
+                    social: [{
+                            platform: "LinkedIn",
+                            url: "#",
+                            icon: "fab fa-linkedin"
+                        },
+                        {
+                            platform: "Medium",
+                            url: "#",
+                            icon: "fab fa-medium"
+                        }
+                    ]
+                },
+                3: { // Example of another staff member for QR code
+                    name: "David Wilson",
+                    title: "Marketing Manager",
+                    email: "david.wilson@edunaviq.tech",
+                    image: "images/david.jpg", // Replace with actual image path
+                    phone: "+1-555-0103",
+                    department: "Marketing & Outreach",
+                    employeeId: "EM003",
+                    bio: "David leads our marketing initiatives, focusing on brand growth and community engagement. He is passionate about connecting students with EduNaviQ's innovative solutions.",
+                    social: [{
+                            platform: "LinkedIn",
+                            url: "#",
+                            icon: "fab fa-linkedin"
+                        },
+                        {
+                            platform: "Instagram",
+                            url: "#",
+                            icon: "fab fa-instagram-square"
+                        }
+                    ]
+                }
+            };
+            // --- End of Staff Data for verify.html ---
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const staffId = urlParams.get('id');
+
+            if (staffId && staffData[staffId]) {
+                verifiedPopup.classList.remove('hidden');
+                verifiedPopup.classList.add('flex');
+                const data = staffData[staffId];
+
+                setTimeout(() => {
+                    verifiedPopup.classList.replace('animate-fadeIn', 'animate-fadeOut');
+                    verifiedPopup.addEventListener('animationend', () => {
+                        verifiedPopup.classList.add('hidden');
+                    }, {
+                        once: true
+                    });
+
+                    document.getElementById('staffImage').src = data.image;
+                    document.getElementById('staffImage').alt = data.name + " Photo";
+                    document.getElementById('staffName').textContent = data.name;
+                    document.getElementById('staffTitle').textContent = data.title;
+                    const emailLink = document.getElementById('staffEmail');
+                    emailLink.textContent = data.email;
+                    emailLink.href = `mailto:${data.email}`;
+                    document.getElementById('staffPhone').textContent = data.phone || "N/A";
+                    document.getElementById('staffDepartment').textContent = data.department || "N/A";
+                    document.getElementById('staffEmployeeId').textContent = data.employeeId || "N/A";
+                    document.getElementById('staffBio').textContent = data.bio;
+
+                    const socialMediaDiv = document.getElementById('staffSocialMedia');
+                    socialMediaDiv.innerHTML = '';
+                    if (data.social && data.social.length > 0) {
+                        data.social.forEach(link => {
+                            const a = document.createElement('a');
+                            a.href = link.url;
+                            a.target = '_blank';
+                            a.setAttribute('aria-label', link.platform);
+                            a.className =
+                                'text-edu-primary text-3xl mx-2 transition-colors duration-300 hover:text-edu-hover';
+                            const i = document.createElement('i');
+                            i.className = link.icon;
+                            a.appendChild(i);
+                            socialMediaDiv.appendChild(a);
+                        });
+                    }
+                    staffDetailContent.classList.remove('hidden');
+                }, 2000);
+            } else {
+                errorMessageSection.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
