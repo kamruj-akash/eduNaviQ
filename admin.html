@@ -52,7 +52,8 @@
                 <table class="min-w-full bg-white">
                     <thead class="bg-gray-100">
                         <tr>
-                            <th class="py-3 px-4 text-left">ID</th>
+                            <th class="py-3 px-4 text-left">Employee ID</th>
+                            <th class="py-3 px-4 text-left">System ID (for QR Code)</th>
                             <th class="py-3 px-4 text-left">Name</th>
                             <th class="py-3 px-4 text-left">Title</th>
                             <th class="py-3 px-4 text-left">Actions</th>
@@ -97,6 +98,14 @@
                         <input type="text" id="department"
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                     </div>
+
+                    <div>
+                        <label for="employeeIdField" class="block text-sm font-medium text-gray-700">Employee ID (e.g.,
+                            ENQ-001)</label>
+                        <input type="text" id="employeeIdField" required placeholder="A unique ID for the employee"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+
                     <div>
                         <label for="image" class="block text-sm font-medium text-gray-700">Image Path (e.g.,
                             images/new-employee.jpg)</label>
@@ -107,14 +116,59 @@
                         <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
                         <textarea id="bio" rows="3"
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                        </div>
+
+                        <div class="border-t pt-4 mt-4">
+                            <h4 class="text-lg font-medium text-gray-800 mb-2">Social Media Links</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="linkedin" class="flex items-center text-sm font-medium text-gray-700"><i
+                                            class="fab fa-linkedin mr-2 text-blue-700"></i>LinkedIn URL</label>
+                                    <input type="url" id="linkedin" placeholder="https://linkedin.com/in/..."
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="github" class="flex items-center text-sm font-medium text-gray-700"><i
+                                            class="fab fa-github mr-2 text-gray-800"></i>GitHub URL</label>
+                                    <input type="url" id="github" placeholder="https://github.com/..."
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="twitter" class="flex items-center text-sm font-medium text-gray-700"><i
+                                            class="fab fa-twitter mr-2 text-sky-500"></i>Twitter URL</label>
+                                    <input type="url" id="twitter" placeholder="https://twitter.com/..."
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="facebook" class="flex items-center text-sm font-medium text-gray-700"><i
+                                            class="fab fa-facebook mr-2 text-blue-600"></i>Facebook URL</label>
+                                    <input type="url" id="facebook" placeholder="https://facebook.com/..."
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="instagram"
+                                        class="flex items-center text-sm font-medium text-gray-700"><i
+                                            class="fab fa-instagram mr-2 text-pink-500"></i>Instagram URL</label>
+                                    <input type="url" id="instagram" placeholder="https://instagram.com/..."
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                </div>
+                                <div>
+                                    <label for="youtube" class="flex items-center text-sm font-medium text-gray-700"><i
+                                            class="fab fa-youtube mr-2 text-red-600"></i>YouTube URL</label>
+                                    <input type="url" id="youtube" placeholder="https://youtube.com/..."
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end space-x-4 pt-4">
+                            <button type="button" id="cancelBtn"
+                                class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
+                            <button type="submit"
+                                class="bg-edu-primary text-white px-4 py-2 rounded-md hover:bg-opacity-90">Save
+                                Employee</button>
+                        </div>
                     </div>
-                    <div class="flex justify-end space-x-4 pt-4">
-                        <button type="button" id="cancelBtn"
-                            class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
-                        <button type="submit"
-                            class="bg-edu-primary text-white px-4 py-2 rounded-md hover:bg-opacity-90">Save
-                            Employee</button>
-                    </div>
+                    
                 </form>
             </div>
         </div>

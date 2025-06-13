@@ -303,19 +303,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // --- Shared Function ---
             const getStaffData = () => {
                 const data = localStorage.getItem('staffData');
                 return data ? JSON.parse(data) : {};
             };
-
             const staffData = getStaffData();
 
-            // --- Page Elements ---
+            const socialIconMap = {
+                linkedin: 'fab fa-linkedin',
+                github: 'fab fa-github-square',
+                twitter: 'fab fa-twitter-square',
+                facebook: 'fab fa-facebook-square',
+                instagram: 'fab fa-instagram-square',
+                youtube: 'fab fa-youtube'
+            };
+
             const currentYearSpan = document.getElementById('currentYear');
-            if (currentYearSpan) {
-                currentYearSpan.textContent = new Date().getFullYear();
-            }
+            if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 
             const verifiedPopup = document.getElementById('verifiedPopup');
             const staffDetailContent = document.getElementById('staff-detail-content');
@@ -330,16 +334,10 @@
                 const data = staffData[staffId];
 
                 setTimeout(() => {
-                    verifiedPopup.classList.replace('animate-fadeIn', 'animate-fadeOut');
-                    verifiedPopup.addEventListener('animationend', () => {
-                        verifiedPopup.classList.add('hidden');
-                    }, {
-                        once: true
-                    });
+                    verifiedPopup.classList.add('hidden');
 
                     document.getElementById('staffImage').src = data.image ||
                         'images/staff-placeholder.png';
-                    document.getElementById('staffImage').alt = data.name + " Photo";
                     document.getElementById('staffName').textContent = data.name;
                     document.getElementById('staffTitle').textContent = data.title;
                     const emailLink = document.getElementById('staffEmail');
@@ -347,25 +345,27 @@
                     emailLink.href = `mailto:${data.email}`;
                     document.getElementById('staffPhone').textContent = data.phone || "N/A";
                     document.getElementById('staffDepartment').textContent = data.department || "N/A";
-                    document.getElementById('staffEmployeeId').textContent = data.id ||
-                    "N/A"; // Using main ID
+                    document.getElementById('staffEmployeeId').textContent = data.employeeId || "N/A";
                     document.getElementById('staffBio').textContent = data.bio;
 
                     const socialMediaDiv = document.getElementById('staffSocialMedia');
                     socialMediaDiv.innerHTML = '';
-                    if (data.social && data.social.length > 0) {
-                        data.social.forEach(link => {
-                            const a = document.createElement('a');
-                            a.href = link.url;
-                            a.target = '_blank';
-                            a.setAttribute('aria-label', link.platform);
-                            a.className =
-                                'text-edu-primary text-3xl mx-2 transition-colors duration-300 hover:text-edu-hover';
-                            const i = document.createElement('i');
-                            i.className = link.icon;
-                            a.appendChild(i);
-                            socialMediaDiv.appendChild(a);
-                        });
+                    const social = data.social || {};
+                    if (Object.keys(social).length > 0) {
+                        for (const [platform, url] of Object.entries(social)) {
+                            if (url && socialIconMap[platform]) {
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.target = '_blank';
+                                a.setAttribute('aria-label', platform);
+                                a.className =
+                                    'text-edu-primary text-3xl mx-2 transition-colors duration-300 hover:text-edu-hover';
+                                const i = document.createElement('i');
+                                i.className = socialIconMap[platform];
+                                a.appendChild(i);
+                                socialMediaDiv.appendChild(a);
+                            }
+                        }
                     }
                     staffDetailContent.classList.remove('hidden');
                 }, 2000);

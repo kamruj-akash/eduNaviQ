@@ -118,10 +118,135 @@
 
 
 
+// ==== second version of script.js for index.html ====
 
+// document.addEventListener('DOMContentLoaded', function() {
+//     // --- Shared Functions & Data ---
+//     const getStaffData = () => {
+//         const data = localStorage.getItem('staffData');
+//         return data ? JSON.parse(data) : {};
+//     };
+
+//     const staffData = getStaffData();
+//     const staffGrid = document.getElementById('staff-grid');
+//     const modal = document.getElementById('staffModal');
+//     const closeButton = modal.querySelector('.close-button');
+
+//     // --- Render Staff Cards on index.html ---
+//     const renderStaffCards = () => {
+//         if (!staffGrid) return;
+//         staffGrid.innerHTML = ''; // Clear existing cards
+
+//         if (Object.keys(staffData).length === 0) {
+//             staffGrid.innerHTML = `<p class="text-center col-span-3">No staff members found. Add members from the admin dashboard.</p>`;
+//             return;
+//         }
+
+//         for (const id in staffData) {
+//             const employee = staffData[id];
+//             const cardHTML = `
+//                 <div class="staff-card bg-white rounded-xl shadow-lg p-6 text-center transition-all duration-300 ease-in-out hover:transform hover:-translate-y-2 hover:shadow-xl hover:shadow-edu-secondary/40" data-staff-id="${employee.id}">
+//                     <img src="${employee.image || 'images/staff-placeholder.png'}" alt="${employee.name} Photo" class="w-32 h-32 rounded-full object-cover mx-auto mb-5 border-4 border-edu-secondary shadow-md">
+//                     <h3 class="text-xl font-semibold text-edu-primary mb-1">${employee.name}</h3>
+//                     <p class="text-edu-secondary text-md font-medium mb-2">${employee.title}</p>
+//                     <p class="text-gray-600 text-sm mb-4 break-all"><i class="fas fa-envelope text-edu-secondary mr-2"></i>${employee.email}</p>
+//                     <button class="view-more-btn bg-edu-secondary text-white px-6 py-3 rounded-full font-semibold uppercase text-xs tracking-wider transition-all duration-300 ease-in-out hover:bg-edu-hover hover:shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-edu-hover focus:ring-opacity-50">View More</button>
+//                 </div>
+//             `;
+//             staffGrid.insertAdjacentHTML('beforeend', cardHTML);
+//         }
+//     };
+
+//     // --- Modal Logic ---
+//     const openModal = (staffId) => {
+//         const data = staffData[staffId];
+//         if (data && modal) {
+//             modal.querySelector('#modalStaffImage').src = data.image || 'images/staff-placeholder.png';
+//             modal.querySelector('#modalStaffImage').alt = data.name + " Photo";
+//             modal.querySelector('#modalStaffName').textContent = data.name;
+//             modal.querySelector('#modalStaffTitle').textContent = data.title;
+//             const emailLink = modal.querySelector('#modalStaffEmail');
+//             emailLink.textContent = data.email;
+//             emailLink.href = `mailto:${data.email}`;
+//             modal.querySelector('#modalStaffPhone').textContent = data.phone || "N/A";
+//             modal.querySelector('#modalStaffDepartment').textContent = data.department || "N/A";
+//             modal.querySelector('#modalStaffEmployeeId').textContent = data.id || "N/A";
+//             modal.querySelector('#modalStaffBio').textContent = data.bio || "No bio available.";
+            
+//             const socialMediaDiv = modal.querySelector('#modalSocialMedia');
+//             socialMediaDiv.innerHTML = ''; 
+//             if (data.social && data.social.length > 0) {
+//                 data.social.forEach(link => {
+//                     const a = document.createElement('a');
+//                     a.href = link.url;
+//                     a.target = '_blank';
+//                     a.setAttribute('aria-label', link.platform);
+//                     a.className = 'text-edu-primary text-3xl mx-2 transition-colors duration-300 hover:text-edu-hover';
+//                     const i = document.createElement('i');
+//                     i.className = link.icon;
+//                     a.appendChild(i);
+//                     socialMediaDiv.appendChild(a);
+//                 });
+//             }
+            
+//             modal.classList.remove('hidden');
+//             modal.classList.add('flex');
+//             document.body.style.overflow = 'hidden';
+//         }
+//     };
+
+//     const closeModal = () => {
+//         if (modal) {
+//             modal.classList.add('hidden');
+//             modal.classList.remove('flex');
+//             document.body.style.overflow = '';
+//         }
+//     };
+    
+//     // --- Event Listeners ---
+//     if (staffGrid) {
+//         staffGrid.addEventListener('click', function(e) {
+//             const viewMoreBtn = e.target.closest('.view-more-btn');
+//             if (viewMoreBtn) {
+//                 const staffId = viewMoreBtn.closest('.staff-card').dataset.staffId;
+//                 openModal(staffId);
+//             }
+//         });
+//     }
+
+//     if(closeButton) {
+//         closeButton.addEventListener('click', closeModal);
+//     }
+
+//     if (modal) {
+//         modal.addEventListener('click', (e) => {
+//             if (e.target === modal) closeModal();
+//         });
+//     }
+    
+//     window.addEventListener('keydown', (e) => {
+//         if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+//             closeModal();
+//         }
+//     });
+
+//     // Initial Render
+//     renderStaffCards();
+//     const currentYearSpan = document.getElementById('currentYear');
+//     if(currentYearSpan) {
+//        currentYearSpan.textContent = new Date().getFullYear();
+//     }
+// });
+
+
+
+
+
+
+
+// ===== thired JavaScript for admin.js =====
 
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Shared Functions & Data ---
     const getStaffData = () => {
         const data = localStorage.getItem('staffData');
         return data ? JSON.parse(data) : {};
@@ -132,67 +257,91 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('staffModal');
     const closeButton = modal.querySelector('.close-button');
 
-    // --- Render Staff Cards on index.html ---
+    // Map platform keys to their Font Awesome icons
+    const socialIconMap = {
+        linkedin: 'fab fa-linkedin',
+        github: 'fab fa-github-square',
+        twitter: 'fab fa-twitter-square',
+        facebook: 'fab fa-facebook-square',
+        instagram: 'fab fa-instagram-square',
+        youtube: 'fab fa-youtube'
+    };
+
     const renderStaffCards = () => {
         if (!staffGrid) return;
-        staffGrid.innerHTML = ''; // Clear existing cards
+        staffGrid.innerHTML = '';
 
         if (Object.keys(staffData).length === 0) {
-            staffGrid.innerHTML = `<p class="text-center col-span-3">No staff members found. Add members from the admin dashboard.</p>`;
+            staffGrid.innerHTML = `<p class="text-center col-span-3">No staff members found.</p>`;
             return;
         }
 
         for (const id in staffData) {
             const employee = staffData[id];
+            let socialIconsHTML = '';
+            const social = employee.social || {};
+
+            if (Object.keys(social).length > 0) {
+                socialIconsHTML += '<div class="social-media-links mb-5">';
+                for (const [platform, url] of Object.entries(social)) {
+                    if (url && socialIconMap[platform]) {
+                        socialIconsHTML += `<a href="${url}" target="_blank" aria-label="${platform}" class="text-edu-primary text-2xl mx-2 transition-colors duration-300 hover:text-edu-hover"><i class="${socialIconMap[platform]}"></i></a>`;
+                    }
+                }
+                socialIconsHTML += '</div>';
+            }
+
             const cardHTML = `
                 <div class="staff-card bg-white rounded-xl shadow-lg p-6 text-center transition-all duration-300 ease-in-out hover:transform hover:-translate-y-2 hover:shadow-xl hover:shadow-edu-secondary/40" data-staff-id="${employee.id}">
                     <img src="${employee.image || 'images/staff-placeholder.png'}" alt="${employee.name} Photo" class="w-32 h-32 rounded-full object-cover mx-auto mb-5 border-4 border-edu-secondary shadow-md">
                     <h3 class="text-xl font-semibold text-edu-primary mb-1">${employee.name}</h3>
                     <p class="text-edu-secondary text-md font-medium mb-2">${employee.title}</p>
                     <p class="text-gray-600 text-sm mb-4 break-all"><i class="fas fa-envelope text-edu-secondary mr-2"></i>${employee.email}</p>
-                    <button class="view-more-btn bg-edu-secondary text-white px-6 py-3 rounded-full font-semibold uppercase text-xs tracking-wider transition-all duration-300 ease-in-out hover:bg-edu-hover hover:shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-edu-hover focus:ring-opacity-50">View More</button>
+                    ${socialIconsHTML}
+                    <button class="view-more-btn bg-edu-secondary text-white px-6 py-3 rounded-full font-semibold uppercase text-xs tracking-wider transition-all duration-300 ease-in-out hover:bg-edu-hover hover:shadow-lg transform hover:scale-105">View More</button>
                 </div>
             `;
             staffGrid.insertAdjacentHTML('beforeend', cardHTML);
         }
     };
-
-    // --- Modal Logic ---
+    
     const openModal = (staffId) => {
         const data = staffData[staffId];
-        if (data && modal) {
-            modal.querySelector('#modalStaffImage').src = data.image || 'images/staff-placeholder.png';
-            modal.querySelector('#modalStaffImage').alt = data.name + " Photo";
-            modal.querySelector('#modalStaffName').textContent = data.name;
-            modal.querySelector('#modalStaffTitle').textContent = data.title;
-            const emailLink = modal.querySelector('#modalStaffEmail');
-            emailLink.textContent = data.email;
-            emailLink.href = `mailto:${data.email}`;
-            modal.querySelector('#modalStaffPhone').textContent = data.phone || "N/A";
-            modal.querySelector('#modalStaffDepartment').textContent = data.department || "N/A";
-            modal.querySelector('#modalStaffEmployeeId').textContent = data.id || "N/A";
-            modal.querySelector('#modalStaffBio').textContent = data.bio || "No bio available.";
-            
-            const socialMediaDiv = modal.querySelector('#modalSocialMedia');
-            socialMediaDiv.innerHTML = ''; 
-            if (data.social && data.social.length > 0) {
-                data.social.forEach(link => {
-                    const a = document.createElement('a');
-                    a.href = link.url;
+        if (!data || !modal) return;
+        
+        modal.querySelector('#modalStaffImage').src = data.image || 'images/staff-placeholder.png';
+        modal.querySelector('#modalStaffName').textContent = data.name;
+        modal.querySelector('#modalStaffTitle').textContent = data.title;
+        const emailLink = modal.querySelector('#modalStaffEmail');
+        emailLink.textContent = data.email;
+        emailLink.href = `mailto:${data.email}`;
+        modal.querySelector('#modalStaffPhone').textContent = data.phone || "N/A";
+        modal.querySelector('#modalStaffDepartment').textContent = data.department || "N/A";
+        modal.querySelector('#modalStaffEmployeeId').textContent = data.employeeId || "N/A";
+        modal.querySelector('#modalStaffBio').textContent = data.bio || "No bio available.";
+        
+        const socialMediaDiv = modal.querySelector('#modalSocialMedia');
+        socialMediaDiv.innerHTML = '';
+        const social = data.social || {};
+        if (Object.keys(social).length > 0) {
+            for (const [platform, url] of Object.entries(social)) {
+                if (url && socialIconMap[platform]) {
+                     const a = document.createElement('a');
+                    a.href = url;
                     a.target = '_blank';
-                    a.setAttribute('aria-label', link.platform);
+                    a.setAttribute('aria-label', platform);
                     a.className = 'text-edu-primary text-3xl mx-2 transition-colors duration-300 hover:text-edu-hover';
                     const i = document.createElement('i');
-                    i.className = link.icon;
+                    i.className = socialIconMap[platform];
                     a.appendChild(i);
                     socialMediaDiv.appendChild(a);
-                });
+                }
             }
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
         }
+        
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
     };
 
     const closeModal = () => {
@@ -203,37 +352,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // --- Event Listeners ---
-    if (staffGrid) {
-        staffGrid.addEventListener('click', function(e) {
-            const viewMoreBtn = e.target.closest('.view-more-btn');
-            if (viewMoreBtn) {
-                const staffId = viewMoreBtn.closest('.staff-card').dataset.staffId;
-                openModal(staffId);
-            }
-        });
-    }
-
-    if(closeButton) {
-        closeButton.addEventListener('click', closeModal);
-    }
-
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-    }
+    if (staffGrid) staffGrid.addEventListener('click', (e) => e.target.closest('.view-more-btn') && openModal(e.target.closest('.staff-card').dataset.staffId));
+    if (closeButton) closeButton.addEventListener('click', closeModal);
+    if (modal) modal.addEventListener('click', (e) => e.target === modal && closeModal());
+    window.addEventListener('keydown', (e) => e.key === 'Escape' && modal && !modal.classList.contains('hidden') && closeModal());
     
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
-            closeModal();
-        }
-    });
-
-    // Initial Render
     renderStaffCards();
     const currentYearSpan = document.getElementById('currentYear');
-    if(currentYearSpan) {
-       currentYearSpan.textContent = new Date().getFullYear();
-    }
+    if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 });

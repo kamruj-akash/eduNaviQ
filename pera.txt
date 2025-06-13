@@ -1,3 +1,5 @@
 
 
-ID Link: your_file_path/verify.html?id=1749804094283
+ID Link: your_file_path/verify.html?id=
+
+password: akash@edunaviq
