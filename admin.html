@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EduNaviQ Technology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'edu-primary': '#0A2342',
+                        'edu-secondary': '#2CA5A9'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <nav class="bg-edu-primary shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">Admin Dashboard</h1>
+            <div>
+                <a href="index.html" target="_blank" class="text-white hover:text-gray-200 mr-4">View Website</a>
+                <button id="logoutButton"
+                    class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-700">Employee List</h2>
+                <button id="addEmployeeBtn"
+                    class="bg-edu-secondary text-white px-4 py-2 rounded-md hover:bg-opacity-90">
+                    <i class="fas fa-plus mr-2"></i>Add New Employee
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="py-3 px-4 text-left">ID</th>
+                            <th class="py-3 px-4 text-left">Name</th>
+                            <th class="py-3 px-4 text-left">Title</th>
+                            <th class="py-3 px-4 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="employeeModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b">
+                    <h3 id="modalTitle" class="text-2xl font-semibold text-gray-800">Add New Employee</h3>
+                </div>
+                <form id="employeeForm" class="p-6 space-y-4">
+                    <input type="hidden" id="employeeIdInput">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="name" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">Title / Designation</label>
+                        <input type="text" id="title" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                        <input type="text" id="phone"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+                    <div>
+                        <label for="department" class="block text-sm font-medium text-gray-700">Department</label>
+                        <input type="text" id="department"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+                    <div>
+                        <label for="image" class="block text-sm font-medium text-gray-700">Image Path (e.g.,
+                            images/new-employee.jpg)</label>
+                        <input type="text" id="image" placeholder="images/staff-placeholder.png"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+                    <div>
+                        <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
+                        <textarea id="bio" rows="3"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-4 pt-4">
+                        <button type="button" id="cancelBtn"
+                            class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">Cancel</button>
+                        <button type="submit"
+                            class="bg-edu-primary text-white px-4 py-2 rounded-md hover:bg-opacity-90">Save
+                            Employee</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="admin.js"></script>
+</body>
+
+</html>

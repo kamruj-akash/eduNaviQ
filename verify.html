@@ -162,7 +162,7 @@
         </div>
     </footer>
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const currentYearSpan = document.getElementById('currentYear');
             if (currentYearSpan) {
@@ -184,7 +184,7 @@
                     image: "images/michael.jpg", // Replace
                     phone: "+880-1310-519030",
                     department: "HR & Administration",
-                    employeeId: "A001",
+                    employeeId: "002",
                     bio: "AKASH is an experienced in building scalable EdTech platforms. He leads the core system development at EduNaviQ Technology, focusing on innovative solutions and robust architecture. His problem-solving skills are key to our tech advancements.",
                     social: [{
                             platform: "LinkedIn",
@@ -298,7 +298,84 @@
                 errorMessageSection.classList.remove('hidden');
             }
         });
+    </script> -->
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Shared Function ---
+            const getStaffData = () => {
+                const data = localStorage.getItem('staffData');
+                return data ? JSON.parse(data) : {};
+            };
+
+            const staffData = getStaffData();
+
+            // --- Page Elements ---
+            const currentYearSpan = document.getElementById('currentYear');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            const verifiedPopup = document.getElementById('verifiedPopup');
+            const staffDetailContent = document.getElementById('staff-detail-content');
+            const errorMessageSection = document.getElementById('errorMessage');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const staffId = urlParams.get('id');
+
+            if (staffId && staffData[staffId]) {
+                verifiedPopup.classList.remove('hidden');
+                verifiedPopup.classList.add('flex');
+                const data = staffData[staffId];
+
+                setTimeout(() => {
+                    verifiedPopup.classList.replace('animate-fadeIn', 'animate-fadeOut');
+                    verifiedPopup.addEventListener('animationend', () => {
+                        verifiedPopup.classList.add('hidden');
+                    }, {
+                        once: true
+                    });
+
+                    document.getElementById('staffImage').src = data.image ||
+                        'images/staff-placeholder.png';
+                    document.getElementById('staffImage').alt = data.name + " Photo";
+                    document.getElementById('staffName').textContent = data.name;
+                    document.getElementById('staffTitle').textContent = data.title;
+                    const emailLink = document.getElementById('staffEmail');
+                    emailLink.textContent = data.email;
+                    emailLink.href = `mailto:${data.email}`;
+                    document.getElementById('staffPhone').textContent = data.phone || "N/A";
+                    document.getElementById('staffDepartment').textContent = data.department || "N/A";
+                    document.getElementById('staffEmployeeId').textContent = data.id ||
+                    "N/A"; // Using main ID
+                    document.getElementById('staffBio').textContent = data.bio;
+
+                    const socialMediaDiv = document.getElementById('staffSocialMedia');
+                    socialMediaDiv.innerHTML = '';
+                    if (data.social && data.social.length > 0) {
+                        data.social.forEach(link => {
+                            const a = document.createElement('a');
+                            a.href = link.url;
+                            a.target = '_blank';
+                            a.setAttribute('aria-label', link.platform);
+                            a.className =
+                                'text-edu-primary text-3xl mx-2 transition-colors duration-300 hover:text-edu-hover';
+                            const i = document.createElement('i');
+                            i.className = link.icon;
+                            a.appendChild(i);
+                            socialMediaDiv.appendChild(a);
+                        });
+                    }
+                    staffDetailContent.classList.remove('hidden');
+                }, 2000);
+            } else {
+                errorMessageSection.classList.remove('hidden');
+            }
+        });
     </script>
+
+
 </body>
 
 </html>

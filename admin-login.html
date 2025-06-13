@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - EduNaviQ Technology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'edu-primary': '#0A2342',
+                        'edu-secondary': '#2CA5A9'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-edu-primary">Admin Panel Login</h1>
+            <p class="text-gray-500">Please enter the password to access the dashboard.</p>
+        </div>
+        <form id="loginForm">
+            <div class="space-y-4">
+                <div>
+                    <label for="password" class="sr-only">Password</label>
+                    <input type="password" id="password" required
+                        class="w-full px-4 py-2 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-edu-secondary"
+                        placeholder="Password">
+                </div>
+                <p id="errorMessage" class="text-red-500 text-sm text-center hidden">Incorrect password. Please try
+                    again.</p>
+                <div>
+                    <button type="submit"
+                        class="w-full px-4 py-2 text-lg font-semibold text-white bg-edu-primary rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-edu-primary">
+                        Login
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // For simplicity, the password is hardcoded here.
+            // In a real-world application, this should be handled by a secure backend.
+            const correctPassword = 'admin';
+
+            if (password === correctPassword) {
+                // Save login state to session storage and redirect
+                sessionStorage.setItem('isAdminLoggedIn', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
