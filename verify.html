@@ -164,6 +164,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // CORRECTED DATA FETCH FUNCTION
             const getStaffData = () => {
                 const data = localStorage.getItem('staffData');
                 return data ? JSON.parse(data) : {};
