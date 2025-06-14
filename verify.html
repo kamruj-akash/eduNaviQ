@@ -162,145 +162,6 @@
         </div>
     </footer>
 
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const currentYearSpan = document.getElementById('currentYear');
-            if (currentYearSpan) {
-                currentYearSpan.textContent = new Date().getFullYear();
-            }
-
-            const verifiedPopup = document.getElementById('verifiedPopup');
-            const staffDetailContent = document.getElementById('staff-detail-content');
-            const errorMessageSection = document.getElementById('errorMessage');
-
-            // --- Staff Data for verify.html (Comprehensive list for QR verification) ---
-            // This should contain ALL staff members who will have a QR code.
-            // Keep this consistent with staffData in script.js for members also on the team page.
-            const staffData = {
-                9030: {
-                    name: "KAMRUZZAMAN AKASH",
-                    title: "HR & Admin Manager",
-                    email: "akash@edunaviq.tech",
-                    image: "images/michael.jpg", // Replace
-                    phone: "+880-1310-519030",
-                    department: "HR & Administration",
-                    employeeId: "002",
-                    bio: "AKASH is an experienced in building scalable EdTech platforms. He leads the core system development at EduNaviQ Technology, focusing on innovative solutions and robust architecture. His problem-solving skills are key to our tech advancements.",
-                    social: [{
-                            platform: "LinkedIn",
-                            url: "https://www.linkedin.com/in/kamruj-akash/",
-                            icon: "fab fa-linkedin"
-                        },
-                        {
-                            platform: "Twitter",
-                            url: "https://x.com/kamruj_akash",
-                            icon: "fab fa-twitter-square"
-                        },
-                        {
-                            platform: "Github",
-                            url: "https://github.com/kamruj-akash",
-                            icon: "fab fa-github-square"
-                        }
-                    ]
-                },
-                2: {
-                    name: "Sophia Miller",
-                    title: "Senior Educational Consultant",
-                    email: "sophia.miller@edunaviq.tech",
-                    image: "images/sophia.jpg", // Replace
-                    phone: "+1-555-0102",
-                    department: "Academic Advisory",
-                    employeeId: "EC002",
-                    bio: "Sophia is a dedicated educational consultant with a passion for helping students navigate their academic journeys. She provides expert guidance on course selection, career planning, and skill development, empowering students to achieve their full potential.",
-                    social: [{
-                            platform: "LinkedIn",
-                            url: "#",
-                            icon: "fab fa-linkedin"
-                        },
-                        {
-                            platform: "Medium",
-                            url: "#",
-                            icon: "fab fa-medium"
-                        }
-                    ]
-                },
-                3: { // Example of another staff member for QR code
-                    name: "David Wilson",
-                    title: "Marketing Manager",
-                    email: "david.wilson@edunaviq.tech",
-                    image: "images/david.jpg", // Replace with actual image path
-                    phone: "+1-555-0103",
-                    department: "Marketing & Outreach",
-                    employeeId: "EM003",
-                    bio: "David leads our marketing initiatives, focusing on brand growth and community engagement. He is passionate about connecting students with EduNaviQ's innovative solutions.",
-                    social: [{
-                            platform: "LinkedIn",
-                            url: "#",
-                            icon: "fab fa-linkedin"
-                        },
-                        {
-                            platform: "Instagram",
-                            url: "#",
-                            icon: "fab fa-instagram-square"
-                        }
-                    ]
-                }
-            };
-            // --- End of Staff Data for verify.html ---
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const staffId = urlParams.get('id');
-
-            if (staffId && staffData[staffId]) {
-                verifiedPopup.classList.remove('hidden');
-                verifiedPopup.classList.add('flex');
-                const data = staffData[staffId];
-
-                setTimeout(() => {
-                    verifiedPopup.classList.replace('animate-fadeIn', 'animate-fadeOut');
-                    verifiedPopup.addEventListener('animationend', () => {
-                        verifiedPopup.classList.add('hidden');
-                    }, {
-                        once: true
-                    });
-
-                    document.getElementById('staffImage').src = data.image;
-                    document.getElementById('staffImage').alt = data.name + " Photo";
-                    document.getElementById('staffName').textContent = data.name;
-                    document.getElementById('staffTitle').textContent = data.title;
-                    const emailLink = document.getElementById('staffEmail');
-                    emailLink.textContent = data.email;
-                    emailLink.href = `mailto:${data.email}`;
-                    document.getElementById('staffPhone').textContent = data.phone || "N/A";
-                    document.getElementById('staffDepartment').textContent = data.department || "N/A";
-                    document.getElementById('staffEmployeeId').textContent = data.employeeId || "N/A";
-                    document.getElementById('staffBio').textContent = data.bio;
-
-                    const socialMediaDiv = document.getElementById('staffSocialMedia');
-                    socialMediaDiv.innerHTML = '';
-                    if (data.social && data.social.length > 0) {
-                        data.social.forEach(link => {
-                            const a = document.createElement('a');
-                            a.href = link.url;
-                            a.target = '_blank';
-                            a.setAttribute('aria-label', link.platform);
-                            a.className =
-                                'text-edu-primary text-3xl mx-2 transition-colors duration-300 hover:text-edu-hover';
-                            const i = document.createElement('i');
-                            i.className = link.icon;
-                            a.appendChild(i);
-                            socialMediaDiv.appendChild(a);
-                        });
-                    }
-                    staffDetailContent.classList.remove('hidden');
-                }, 2000);
-            } else {
-                errorMessageSection.classList.remove('hidden');
-            }
-        });
-    </script> -->
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const getStaffData = () => {
@@ -334,7 +195,14 @@
                 const data = staffData[staffId];
 
                 setTimeout(() => {
-                    verifiedPopup.classList.add('hidden');
+                    verifiedPopup.classList.remove('animate-fadeIn');
+                    verifiedPopup.classList.add('animate-fadeOut');
+
+                    verifiedPopup.addEventListener('animationend', () => {
+                        verifiedPopup.classList.add('hidden');
+                    }, {
+                        once: true
+                    });
 
                     document.getElementById('staffImage').src = data.image ||
                         'images/staff-placeholder.png';
@@ -368,13 +236,12 @@
                         }
                     }
                     staffDetailContent.classList.remove('hidden');
-                }, 2000);
+                }, 1500); // Shortened time for better UX
             } else {
                 errorMessageSection.classList.remove('hidden');
             }
         });
     </script>
-
 
 </body>
 

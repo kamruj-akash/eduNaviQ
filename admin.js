@@ -5,42 +5,52 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Default data to initialize with if localStorage is empty
-    const initialStaffData = {
-        1: { id: 1, name: "Michael Chen", title: "Lead Software Engineer", email: "michael.chen@edunaviq.tech", image: "images/michael.jpg", phone: "+1-555-0101", department: "Technology Development", employeeId: "ET-001", bio: "Michael is an experienced software engineer...", social: { linkedin: '#', github: '#', twitter: '#' } },
-        2: { id: 2, name: "Sophia Miller", title: "Senior Educational Consultant", email: "sophia.miller@edunaviq.tech", image: "images/sophia.jpg", phone: "+1-555-0102", department: "Academic Advisory", employeeId: "EC-002", bio: "Sophia is a dedicated educational consultant...", social: { linkedin: '#' } }
+    // --- INITIAL DATA (IF LOCALSTORAGE IS EMPTY) ---
+    const initialStaffData = { 
+        1: { id: 1, name: "Michael Chen", title: "Lead Software Engineer", employeeId: "ET-001", email: "michael.chen@edunaviq.tech", image: "images/michael.jpg", phone: "+1-555-0101", department: "Technology Development", bio: "Michael is an experienced software engineer...", social: { linkedin: '#' } },
+        2: { id: 2, name: "Sophia Miller", title: "Senior Educational Consultant", employeeId: "EC-002", email: "sophia.miller@edunaviq.tech", image: "images/sophia.jpg", phone: "+1-555-0102", department: "Academic Advisory", bio: "Sophia is a dedicated educational consultant...", social: { linkedin: '#' } }
+    };
+    const initialTestimonialsData = {
+        't1': { id: 't1', name: 'Anika Tabassum', title: 'Computer Science Student', quote: "EduNaviQ's AI recommendations were spot on! It helped me choose the perfect major that aligned with my skills and interests. Highly recommended!" },
+        't2': { id: 't2', name: 'Rohan Ahmed', title: 'Business Administration Aspirant', quote: "The SOP assistance feature is a lifesaver. I was struggling with my application, but EduNaviQ provided the structure and confidence I needed." }
     };
 
-    // --- Data Management Functions ---
-    const getStaffData = () => {
-        const data = localStorage.getItem('staffData');
+    // --- LOCAL STORAGE FUNCTIONS ---
+    const getFromStorage = (key, initialData) => {
+        const data = localStorage.getItem(key);
         if (!data || Object.keys(JSON.parse(data)).length === 0) {
-            localStorage.setItem('staffData', JSON.stringify(initialStaffData));
-            return initialStaffData;
+            localStorage.setItem(key, JSON.stringify(initialData));
+            return initialData;
         }
         return JSON.parse(data);
     };
 
-    const saveStaffData = (data) => {
-        localStorage.setItem('staffData', JSON.stringify(data));
+    const saveToStorage = (key, data) => {
+        localStorage.setItem(key, JSON.stringify(data));
     };
 
-    let staff = getStaffData();
+    let staff = getFromStorage('staffData', initialStaffData);
+    let testimonials = getFromStorage('testimonialsData', initialTestimonialsData);
 
-    // --- UI Elements ---
-    const tableBody = document.getElementById('employeeTableBody');
-    const modal = document.getElementById('employeeModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const form = document.getElementById('employeeForm');
-    const addEmployeeBtn = document.getElementById('addEmployeeBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
+    // --- UI ELEMENTS ---
+    const employeeTableBody = document.getElementById('employeeTableBody');
+    const employeeModal = document.getElementById('employeeModal');
+    const employeeForm = document.getElementById('employeeForm');
+    const testimonialTableBody = document.getElementById('testimonialTableBody');
+    const testimonialModal = document.getElementById('testimonialModal');
+    const testimonialForm = document.getElementById('testimonialForm');
     const logoutButton = document.getElementById('logoutButton');
+    
+    // --- Confirmation Modal Elements ---
+    const confirmationModal = document.getElementById('confirmationModal');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    let confirmDeleteBtn = document.getElementById('confirmDeleteBtn'); // Use 'let' to reassign later
 
-    // --- Render Table Function ---
-    const renderTable = () => {
-        tableBody.innerHTML = '';
-        const sortedStaff = Object.values(staff).sort((a, b) => a.id - b.id);
-        for (const employee of sortedStaff) {
+    // --- RENDER FUNCTIONS ---
+    const renderEmployeeTable = () => {
+        employeeTableBody.innerHTML = '';
+        Object.values(staff).sort((a,b) => a.id - b.id).forEach(employee => {
             const row = `
                 <tr class="border-b">
                     <td class="py-3 px-4 font-semibold text-gray-600">${employee.employeeId}</td>
@@ -52,20 +62,35 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="delete-btn text-red-500 hover:text-red-700 mr-3" data-id="${employee.id}" title="Delete"><i class="fas fa-trash"></i></button>
                         <button class="link-btn text-green-500 hover:text-green-700" data-id="${employee.id}" title="Get Verification Link"><i class="fas fa-link"></i></button>
                     </td>
-                </tr>
-            `;
-            tableBody.insertAdjacentHTML('beforeend', row);
-        }
+                </tr>`;
+            employeeTableBody.insertAdjacentHTML('beforeend', row);
+        });
     };
 
-    // --- Modal Functions (No changes here) ---
-    const openModal = (mode = 'add', employeeId = null) => {
-        form.reset();
+    const renderTestimonialsTable = () => {
+        testimonialTableBody.innerHTML = '';
+        Object.values(testimonials).forEach(item => {
+            const row = `
+                <tr class="border-b">
+                    <td class="py-3 px-4 font-semibold">${item.name}</td>
+                    <td class="py-3 px-4 text-gray-600 italic">"${item.quote.substring(0, 50)}..."</td>
+                    <td class="py-3 px-4">
+                        <button class="edit-testimonial-btn text-blue-500 hover:text-blue-700 mr-3" data-id="${item.id}" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button class="delete-testimonial-btn text-red-500 hover:text-red-700" data-id="${item.id}" title="Delete"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            testimonialTableBody.insertAdjacentHTML('beforeend', row);
+        });
+    };
+    
+    // --- MODAL LOGIC (Employee, Testimonial, Confirmation) ---
+    const openEmployeeModal = (mode = 'add', employeeId = null) => {
+        employeeForm.reset();
         document.getElementById('employeeIdInput').value = '';
         if (mode === 'add') {
-            modalTitle.textContent = 'Add New Employee';
+            employeeModal.querySelector('#modalTitle').textContent = 'Add New Employee';
         } else {
-            modalTitle.textContent = 'Edit Employee';
+            employeeModal.querySelector('#modalTitle').textContent = 'Edit Employee';
             const employee = staff[employeeId];
             if (employee) {
                 document.getElementById('employeeIdInput').value = employee.id;
@@ -86,44 +111,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('youtube').value = social.youtube || '';
             }
         }
-        modal.classList.remove('hidden');
+        employeeModal.classList.remove('hidden');
+    };
+    const closeEmployeeModal = () => employeeModal.classList.add('hidden');
+
+    const openTestimonialModal = (mode = 'add', id = null) => {
+        testimonialForm.reset();
+        document.getElementById('testimonialIdInput').value = '';
+        if (mode === 'add') {
+            testimonialModal.querySelector('#testimonialModalTitle').textContent = 'Add New Testimonial';
+        } else {
+            testimonialModal.querySelector('#testimonialModalTitle').textContent = 'Edit Testimonial';
+            const item = testimonials[id];
+            if (item) {
+                document.getElementById('testimonialIdInput').value = item.id;
+                document.getElementById('studentName').value = item.name;
+                document.getElementById('studentTitle').value = item.title;
+                document.getElementById('quote').value = item.quote;
+            }
+        }
+        testimonialModal.classList.remove('hidden');
+    };
+    const closeTestimonialModal = () => testimonialModal.classList.add('hidden');
+    
+    // --- Confirmation Modal Functions ---
+    const closeConfirmationModal = () => {
+        confirmationModal.classList.add('hidden');
+    };
+    
+    const openConfirmationModal = (message, onConfirm) => {
+        confirmationMessage.textContent = message;
+        confirmationModal.classList.remove('hidden');
+        
+        const newConfirmBtn = confirmDeleteBtn.cloneNode(true);
+        confirmDeleteBtn.parentNode.replaceChild(newConfirmBtn, confirmDeleteBtn);
+        confirmDeleteBtn = newConfirmBtn;
+
+        confirmDeleteBtn.addEventListener('click', () => {
+            onConfirm();
+            closeConfirmationModal();
+        });
     };
 
-    const closeModal = () => modal.classList.add('hidden');
 
-    // --- Event Handlers ---
-    addEmployeeBtn.addEventListener('click', () => openModal('add'));
-    cancelBtn.addEventListener('click', closeModal);
+    // --- EVENT LISTENERS ---
     logoutButton.addEventListener('click', () => {
         sessionStorage.removeItem('isAdminLoggedIn');
         window.location.href = 'admin-login.html';
     });
+    
+    cancelDeleteBtn.addEventListener('click', closeConfirmationModal);
 
-    form.addEventListener('submit', (e) => {
+
+    // --- Employee Listeners ---
+    document.getElementById('addEmployeeBtn').addEventListener('click', () => openEmployeeModal('add'));
+    document.getElementById('cancelBtn').addEventListener('click', closeEmployeeModal);
+    // == NEW: Listener for the 'X' button on the employee modal ==
+    document.getElementById('closeEmployeeModalBtn').addEventListener('click', closeEmployeeModal);
+    
+    employeeForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const systemId = document.getElementById('employeeIdInput').value;
-        const social = {
-            linkedin: document.getElementById('linkedin').value.trim(),
-            github: document.getElementById('github').value.trim(),
-            twitter: document.getElementById('twitter').value.trim(),
-            facebook: document.getElementById('facebook').value.trim(),
-            instagram: document.getElementById('instagram').value.trim(),
-            youtube: document.getElementById('youtube').value.trim()
-        };
+        const social = { linkedin: document.getElementById('linkedin').value.trim(), github: document.getElementById('github').value.trim(), twitter: document.getElementById('twitter').value.trim(), facebook: document.getElementById('facebook').value.trim(), instagram: document.getElementById('instagram').value.trim(), youtube: document.getElementById('youtube').value.trim() };
         Object.keys(social).forEach(key => !social[key] && delete social[key]);
-
-        const employeeData = {
-            name: document.getElementById('name').value,
-            title: document.getElementById('title').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            department: document.getElementById('department').value,
-            employeeId: document.getElementById('employeeIdField').value,
-            image: document.getElementById('image').value || 'images/staff-placeholder.png',
-            bio: document.getElementById('bio').value,
-            social: social
-        };
-
+        const employeeData = { name: document.getElementById('name').value, title: document.getElementById('title').value, email: document.getElementById('email').value, phone: document.getElementById('phone').value, department: document.getElementById('department').value, employeeId: document.getElementById('employeeIdField').value, image: document.getElementById('image').value || 'images/staff-placeholder.png', bio: document.getElementById('bio').value, social: social };
         if (systemId) {
             staff[systemId] = { ...staff[systemId], ...employeeData, id: systemId };
         } else {
@@ -131,68 +182,75 @@ document.addEventListener('DOMContentLoaded', () => {
             employeeData.id = newId;
             staff[newId] = employeeData;
         }
-        
-        saveStaffData(staff);
-        renderTable();
-        closeModal();
+        saveToStorage('staffData', staff);
+        renderEmployeeTable();
+        closeEmployeeModal();
     });
 
-    // === "Click to Copy" ইভেন্ট হ্যান্ডলারটি এখানে আপডেট করা হয়েছে ===
-    tableBody.addEventListener('click', (e) => {
+    employeeTableBody.addEventListener('click', (e) => {
         const editBtn = e.target.closest('.edit-btn');
         const deleteBtn = e.target.closest('.delete-btn');
         const linkBtn = e.target.closest('.link-btn');
-        
+
         if (editBtn) {
-            openModal('edit', editBtn.dataset.id);
-            return; // Stop further execution
-        }
-
-        if (deleteBtn) {
+            openEmployeeModal('edit', editBtn.dataset.id);
+        } else if (deleteBtn) {
             const id = deleteBtn.dataset.id;
-            if (confirm(`Are you sure you want to delete employee ${staff[id].name}?`)) {
+            const message = `Are you sure you want to delete the employee "${staff[id].name}"? This action cannot be undone.`;
+            openConfirmationModal(message, () => {
                 delete staff[id];
-                saveStaffData(staff);
-                renderTable();
-            }
-            return; // Stop further execution
-        }
-
-        if (linkBtn) {
+                saveToStorage('staffData', staff);
+                renderEmployeeTable();
+            });
+        } else if (linkBtn) {
             const id = linkBtn.dataset.id;
-            const origin = window.location.origin;
-            const pathname = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-            const verificationUrl = `${origin}${pathname}/verify.html?id=${id}`;
-
-            // Use the Clipboard API to copy the link
+            const verificationUrl = `${window.location.origin}${window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))}/verify.html?id=${id}`;
             navigator.clipboard.writeText(verificationUrl).then(() => {
-                // Success feedback
                 const icon = linkBtn.querySelector('i');
-                const originalIconClass = 'fas fa-link';
-                const originalTitle = 'Get Verification Link';
-
-                // Change to checkmark
                 icon.className = 'fas fa-check-circle';
-                linkBtn.title = 'Copied!';
-                linkBtn.classList.remove('text-green-500', 'hover:text-green-700');
-                linkBtn.classList.add('text-teal-600');
+                setTimeout(() => { icon.className = 'fas fa-link'; }, 2000);
+            }).catch(err => console.error('Failed to copy: ', err));
+        }
+    });
 
-                // Revert back after 2 seconds
-                setTimeout(() => {
-                    icon.className = originalIconClass;
-                    linkBtn.title = originalTitle;
-                    linkBtn.classList.remove('text-teal-600');
-                    linkBtn.classList.add('text-green-500', 'hover:text-green-700');
-                }, 2000);
+    // --- Testimonial Listeners ---
+    document.getElementById('addTestimonialBtn').addEventListener('click', () => openTestimonialModal('add'));
+    document.getElementById('cancelTestimonialBtn').addEventListener('click', closeTestimonialModal);
+    document.getElementById('closeTestimonialModalBtn').addEventListener('click', closeTestimonialModal);
 
-            }).catch(err => {
-                console.error('Failed to copy link automatically: ', err);
-                // Fallback if clipboard API fails
-                window.prompt("Could not copy automatically. Please copy this link manually:", verificationUrl);
+    testimonialForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('testimonialIdInput').value;
+        const testimonialData = { name: document.getElementById('studentName').value, title: document.getElementById('studentTitle').value, quote: document.getElementById('quote').value };
+        if (id) {
+            testimonials[id] = { ...testimonials[id], ...testimonialData };
+        } else {
+            const newId = 't' + Date.now();
+            testimonialData.id = newId;
+            testimonials[newId] = testimonialData;
+        }
+        saveToStorage('testimonialsData', testimonials);
+        renderTestimonialsTable();
+        closeTestimonialModal();
+    });
+
+    testimonialTableBody.addEventListener('click', (e) => {
+        const editBtn = e.target.closest('.edit-testimonial-btn');
+        const deleteBtn = e.target.closest('.delete-testimonial-btn');
+        if (editBtn) {
+            openTestimonialModal('edit', editBtn.dataset.id);
+        } else if (deleteBtn) {
+            const id = deleteBtn.dataset.id;
+            const message = `Are you sure you want to delete the testimonial from "${testimonials[id].name}"? This action cannot be undone.`;
+            openConfirmationModal(message, () => {
+                delete testimonials[id];
+                saveToStorage('testimonialsData', testimonials);
+                renderTestimonialsTable();
             });
         }
     });
 
-    // Initial render
-    renderTable();
+    // --- INITIAL RENDER ---
+    renderEmployeeTable();
+    renderTestimonialsTable();
 });

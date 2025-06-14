@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - EduNaviQ Technology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #0A2342 0%, #2CA5A9 100%);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'edu-primary': '#0A2342',
+                        'edu-secondary': '#2CA5A9',
+                        'edu-hover': '#3DDAD0',
+                        'edu-light': '#f0f4f8'
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-edu-light">
+
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-6 py-4 text-center">
+            <a href="index.html">
+                <img class="w-[150px] mx-auto" src="images/edunaviq-logo.png" alt="edunaviq-logo.png">
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-20">
+        <div class="max-w-3xl mx-auto">
+            <div id="signupFormContainer" class="bg-white p-8 md:p-12 rounded-xl shadow-2xl">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-edu-primary">Start Your Journey With Us</h1>
+                    <p class="text-gray-600 mt-2">Fill out the form below to get personalized guidance from our experts.
+                    </p>
+                </div>
+
+                <form id="signupForm" class="space-y-6">
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-edu-secondary">
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-edu-secondary">
+                    </div>
+
+                    <div>
+                        <label for="studyLevel" class="block text-sm font-medium text-gray-700 mb-1">Current Level of
+                            Study</label>
+                        <select id="studyLevel" name="studyLevel" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-edu-secondary">
+                            <option value="">Select your level</option>
+                            <option value="high_school">High School / A-Level</option>
+                            <option value="undergraduate">Undergraduate</option>
+                            <option value="graduate">Graduate / Masters</option>
+                            <option value="professional">Professional Development</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="interestField" class="block text-sm font-medium text-gray-700 mb-1">Field of
+                            Interest</label>
+                        <input type="text" id="interestField" name="interestField"
+                            placeholder="e.g., Computer Science, Business, Arts" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-edu-secondary">
+                    </div>
+
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Your Question
+                            (Optional)</label>
+                        <textarea id="message" name="message" rows="4"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-edu-secondary"></textarea>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit"
+                            class="w-full bg-edu-secondary text-white font-bold text-lg py-3 px-6 rounded-lg hover:bg-edu-hover transition-all duration-300 transform hover:scale-105">
+                            Submit Information
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="successPopup" class="hidden text-center bg-white p-8 md:p-12 rounded-xl shadow-2xl animate-fadeIn">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-check-circle text-5xl text-green-500"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-edu-primary mb-2">Thank You For Your Submission!</h2>
+                <p class="text-gray-600 text-lg">We have received your information and will get back to you soon.</p>
+                <a href="index.html"
+                    class="mt-8 inline-block bg-edu-primary text-white font-semibold px-8 py-3 rounded-lg hover:bg-opacity-90 transition-colors">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-edu-primary text-white text-center py-8 mt-12">
+        <div class="container mx-auto px-6">
+            <p>&copy; <span id="currentYear">2025</span> EduNaviQ Technology. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="signup.js"></script>
+</body>
+
+</html>
